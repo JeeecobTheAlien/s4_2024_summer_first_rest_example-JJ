@@ -27,14 +27,22 @@ public class GreetingService {
     public Greeting createGreeting(Greeting newGreeting) {
         if (newGreeting.getLanguages() == null) {
             Language english = languageRepository.findByName("English");
+            Language french = languageRepository.findByName("French");
 
             if (english == null) {
                 english = new Language();
                 languageRepository.save(english);
             }
 
+            if (french == null) {
+                french = new Language("French");
+                french = languageRepository.save(french);
+            }
+
             ArrayList<Language> languageArrayList = new ArrayList<Language>();
             languageArrayList.add(english);
+            languageArrayList.add(french);
+
 
             newGreeting.setLanguages(languageArrayList);
         } else {
