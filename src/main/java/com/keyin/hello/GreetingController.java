@@ -58,7 +58,7 @@ class FrenchGreetingController {
 
     @GetMapping("french_greetings")
     public List<Greeting> getAllFrenchGreetings() {
-        return greetingService.getAllGreetings("French");
+        return greetingService.getAllGreetingsByLanguage("French");
     }
 
     @GetMapping("french_greeting/{index}")
