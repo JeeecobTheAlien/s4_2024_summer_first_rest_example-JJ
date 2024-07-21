@@ -18,6 +18,10 @@ public class Language {
         this.name = "English";
     }
 
+    public Language(String name) {
+        this.name = name;
+    }
+
     public long getId() {
         return id;
     }
@@ -32,5 +36,13 @@ public class Language {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public static void main(String[] args) {
+        Language english = new Language();
+        System.out.println("Language: " + english.getName());
+
+        Language french = new Language("French");
+        System.out.println("Language: " + french.getName());
     }
 }

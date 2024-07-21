@@ -43,3 +43,43 @@ public class GreetingController {
         greetingService.deleteGreeting(index);
     }
 }
+
+@RestController
+@CrossOrigin
+@RequestMapping("/french")
+class FrenchGreetingController {
+    @Autowired
+    private GreetingService greetingService;
+
+    @GetMapping("search_french_greeting")
+    public List<Greeting> searchFrenchGreeting(@RequestParam(value = "name", required = false) String name, @RequestParam(value = "greeting", required = false) String greeting) {
+        return greetingService.findGreetingsByNameAndGreeting(name, greeting);
+    }
+
+    @GetMapping("french_greetings")
+    public List<Greeting> getAllFrenchGreetings() {
+        return greetingService.getAllGreetingsByLanguage("French");
+    }
+
+    @GetMapping("french_greeting/{index}")
+    public Greeting getFrenchGreeting(@PathVariable Integer index) {
+        return greetingService.getGreeting(index);
+    }
+
+    @PostMapping("french_greeting")
+    public Greeting createFrenchGreeting(@RequestBody Greeting newGreeting) {
+        Language french = new Language("French");
+        newGreeting.setLanguages(List.of(french));
+        return greetingService.createGreeting(newGreeting);
+    }
+
+    @PutMapping("french_greeting/{index}")
+    public Greeting updateFrenchGreeting(@PathVariable Integer index, @RequestBody Greeting updatedGreeting) {
+        return greetingService.updateGreeting(index, updatedGreeting);
+    }
+
+    @DeleteMapping("french_greeting/{index}")
+    public void deleteFrenchGreeting(@PathVariable Integer index) {
+        greetingService.deleteGreeting(index);
+    }
+}

@@ -14,27 +14,36 @@ public class GreetingService {
     @Autowired
     private LanguageRepository languageRepository;
 
-    public Greeting getGreeting(long index) {
-        Optional<Greeting> result = greetingRepository.findById(index);
+    public List<Greeting> findGreetingsByNameAndGreeting(String name, String greeting) {
+        return greetingRepository.findByNameAndGreeting(name, greeting);
+    }
 
-        if (result.isPresent()) {
-            return result.get();
-        }
+    public List<Greeting> getAllGreetings() {
+        return (List<Greeting>) greetingRepository.findAll();
+    }
 
-        return null;
+    public Greeting getGreeting(Integer index) {
+        return getGreeting(index.longValue());
     }
 
     public Greeting createGreeting(Greeting newGreeting) {
         if (newGreeting.getLanguages() == null) {
             Language english = languageRepository.findByName("English");
+            Language french = languageRepository.findByName("French");
 
             if (english == null) {
                 english = new Language();
                 languageRepository.save(english);
             }
 
+            if (french == null) {
+                french = new Language("French");
+                french = languageRepository.save(french);
+            }
+
             ArrayList<Language> languageArrayList = new ArrayList<Language>();
             languageArrayList.add(english);
+            languageArrayList.add(french);
 
             newGreeting.setLanguages(languageArrayList);
         } else {
@@ -50,10 +59,6 @@ public class GreetingService {
         return greetingRepository.save(newGreeting);
     }
 
-    public List<Greeting> getAllGreetings() {
-        return (List<Greeting>) greetingRepository.findAll();
-    }
-
     public Greeting updateGreeting(Integer index, Greeting updatedGreeting) {
         Greeting greetingToUpdate = getGreeting(index);
 
@@ -64,11 +69,21 @@ public class GreetingService {
         return greetingRepository.save(greetingToUpdate);
     }
 
-    public void deleteGreeting(long index) {
-        greetingRepository.delete(getGreeting(index));
+    public void deleteGreeting(Integer index) {
+        greetingRepository.delete(getGreeting(index.longValue()));
     }
 
-    public List<Greeting> findGreetingsByNameAndGreeting(String name, String greetingName) {
-        return greetingRepository.findByNameAndGreeting(name, greetingName);
+    public List<Greeting> getAllGreetingsByLanguage(String language) {
+        return greetingRepository.findByLanguages_LanguageName(language);
+    }
+
+    private Greeting getGreeting(long index) {
+        Optional<Greeting> result = greetingRepository.findById(index);
+
+        if (result.isPresent()) {
+            return result.get();
+        }
+
+        return null;
     }
 }

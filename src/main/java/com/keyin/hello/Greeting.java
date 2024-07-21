@@ -4,6 +4,13 @@ import jakarta.persistence.*;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
 @Entity
 public class Greeting {
 
@@ -48,4 +55,22 @@ public class Greeting {
     public void setLanguages(List<Language> languages) {
         this.languages = languages;
     }
+
+    @RestController
+    public class FrenchGreetingController {
+    @Autowired
+    private GreetingService greetingService;
+
+    @PostMapping("french_greeting")
+    public ResponseEntity<Greeting> createFrenchGreeting(@RequestBody Greeting newGreeting) {
+        Language french = new Language("French");
+        newGreeting.setLanguages(List.of(french));
+        newGreeting.setGreeting("Bonjour, comment allez-vous?");
+        newGreeting.setName("French Greeting");
+
+        Greeting createdGreeting = greetingService.createGreeting(newGreeting);
+
+        return new ResponseEntity<>(createdGreeting, HttpStatus.CREATED);
+    }
+}
 }
